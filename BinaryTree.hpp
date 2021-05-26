@@ -1,23 +1,7 @@
 #pragma once
-namespace ariel{
+namespace ariel {
     template<typename T>
     class BinaryTree {
-    private:
-        T *root;
-    public:
-        void add_root(const & T val) {
-
-        }
-
-        void add_left(const & T val) {
-
-        }
-        
-        void add_right(const & T val) {
-
-        }
-
-
     private:
 
         // // Avoid copying
@@ -35,7 +19,39 @@ namespace ariel{
         };
 
         // fields
-        Node *m_first;
+        Node *root;
+
+        BinaryTree(const T &v) {
+            root = new Node(v, nullptr);
+        }
+
+    public:
+        BinaryTree() {
+            root = nullptr;
+        }
+
+        BinaryTree<T> &add_root(const T &val) {
+            if (root == nullptr) {
+                BinaryTree{val};
+            }
+            return *this;
+        }
+
+        BinaryTree<T> &add_left(const T &val_father, const T &val) {
+            return *this;
+        }
+
+        BinaryTree<T> &add_right(const T &val_father, const T &val) {
+            return *this;
+        }
+
+        //----------------------------------
+        // friend global IO operators
+        //----------------------------------
+        friend std::ostream &operator<<(std::ostream &output, const BinaryTree &binary_tree) {
+            return (output << "hello");
+        }
+
 
     public:
 
@@ -102,17 +118,21 @@ namespace ariel{
 
             // ++i;
             virtual iterator_preorder &operator++() {
-                //++pointer_to_current_node;
+                ++this->pointer_to_current_node;
                 this->pointer_to_current_node = this->pointer_to_current_node->m_next;
                 return *this;
+                // return iterator_preorder{nullptr};
+
             }
 
             // i++;
             // Usually iterators are passed by value and not by const& as they are small.
             virtual const iterator_preorder operator++(int) {
-                iterator tmp = *this;
+                iterator_preorder tmp = *this;
                 this->pointer_to_current_node = this->pointer_to_current_node->m_next;
                 return tmp;
+                // return iterator_preorder{nullptr};
+
             }
 
 
@@ -126,17 +146,20 @@ namespace ariel{
 
             // ++i;
             virtual iterator_inorder &operator++() {
-                //++pointer_to_current_node;
+                ++this->pointer_to_current_node;
                 this->pointer_to_current_node = this->pointer_to_current_node->m_next;
                 return *this;
+                // return iterator_inorder{nullptr};
             }
 
             // i++;
             // Usually iterators are passed by value and not by const& as they are small.
             virtual const iterator_inorder operator++(int) {
-                iterator tmp = *this;
+                iterator_inorder tmp = *this;
                 this->pointer_to_current_node = this->pointer_to_current_node->m_next;
                 return tmp;
+                // return iterator_inorder{nullptr};
+
             }
 
 
@@ -149,19 +172,72 @@ namespace ariel{
 
             // ++i;
             virtual iterator_postorder &operator++() {
-                //++pointer_to_current_node;
+                ++this->pointer_to_current_node;
                 this->pointer_to_current_node = this->pointer_to_current_node->m_next;
                 return *this;
+                // return iterator_postorder{nullptr};
+
             }
 
             // i++;
             // Usually iterators are passed by value and not by const& as they are small.
             virtual const iterator_postorder operator++(int) {
-                iterator tmp = *this;
+                iterator_postorder tmp = *this;
                 this->pointer_to_current_node = this->pointer_to_current_node->m_next;
                 return tmp;
+                // return iterator_postorder{nullptr};
+
             }
         };  // END OF CLASS ITERATOR_POSTORDER
+        // class const_iterator_inorder {
+
+        // protected:
+        //     Node *pointer_to_current_node;
+
+        // public:
+
+        //     const_iterator_inorder(Node *ptr = nullptr)
+        //             : pointer_to_current_node(ptr) {
+        //     }
+
+        //     // Note that the method is const as this operator does not
+        //     // allow changing of the iterator.
+        //     // Note that it returns T& as it allows to change what it points to.
+        //     // A const_iterator class will return const T&
+        //     // and the method will still be const
+        //     const T &operator*() const {
+        //         //return *pointer_to_current_node;
+        //         return pointer_to_current_node->m_value;
+        //     }
+
+        //     const T *operator->() const {
+        //         return &(pointer_to_current_node->m_value);
+        //     }
+
+
+        //     // ++i;
+        //     const const_iterator_inorder &operator++() {
+        //         //++pointer_to_current_node;
+        //         this->pointer_to_current_node = this->pointer_to_current_node->m_next;
+        //         return *this;
+        //     }
+
+        //     // i++;
+        //     // Usually iterators are passed by value and not by const& as they are small.
+        //     const const_iterator_inorder operator++(int) {
+        //         const_iterator_inorder tmp = *this;
+        //         this->pointer_to_current_node = this->pointer_to_current_node->m_next;
+        //         return tmp;
+        //     }
+
+        //     bool operator==(const iterator &rhs) const {
+        //         return pointer_to_current_node == rhs.pointer_to_current_node;
+        //     }
+
+        //     bool operator!=(const iterator &rhs) const {
+        //         return pointer_to_current_node != rhs.pointer_to_current_node;
+        //     }
+        // };  // END OF CLASS ITERATOR
 
         iterator_preorder begin_preorder() {
             return iterator_preorder{root};
@@ -179,17 +255,35 @@ namespace ariel{
             return iterator_inorder{nullptr};
         }
 
+        iterator_inorder begin() {
+            return begin_inorder();
+        }
+
+        iterator_inorder end() {
+            return end_inorder();
+        }
+
         iterator_postorder begin_postorder() {
             return iterator_postorder{root};
-
         }
 
         iterator_postorder end_postorder() {
             return iterator_postorder{nullptr};
-
         }
 
-        ~BinaryTree() {}
+        // const_iterator_inorder cbegin() const {
+        //     return const_iterator_inorder{root};
+        // }
+
+        // const_iterator_inorder cend() const {
+        //     return const_iterator_inorder{nullptr};
+        // }
+
+        ~BinaryTree() {
+            if (root != nullptr) {
+                delete root;
+            }
+        }
 
 
     };
